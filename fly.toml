@@ -1,0 +1,33 @@
+app = "xm-gold-smc-v14" # O'zingizga mos unikal nom yozing
+primary_region = "fra"  # Frankfurt (Bybit uchun past ping)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  DATA_DIR = "/data"
+  PRICE_OFFSET = "-8.21"
+
+[mounts]
+  source = "bot_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1
